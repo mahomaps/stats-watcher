@@ -44,25 +44,32 @@ var lines = rawLines
     Console.WriteLine($"~{lines.Length / days:F2}");
 }
 
-PrintUtils.PrintHeader("Geopoint look choice stats");
-PrintUtils.PrintGeoTypeStat(lines, 1, "Я");
-PrintUtils.PrintGeoTypeStat(lines, 2, "Ы");
-PrintUtils.PrintGeoTypeStat(lines, 3, "Ъ");
-
-var allVers = lines.Select(x => x.v).Distinct().Order().ToArray();
-var maxlen = lines.Select(x => x.device.Length).Max();
-
-Console.WriteLine();
-PrintLine("Versions:", "All", allVers, maxlen);
-Console.WriteLine();
-
-var bydev = lines.GroupBy(x => x.device).OrderByDescending(x => x.Count());
-foreach (var dev in bydev)
+// version/device
 {
-    string name = dev.Key;
-    string total = dev.Count().ToString();
-    var byVers = allVers.Select(x => dev.Count(y => y.v == x).ToString());
-    PrintLine(name, total, byVers, maxlen);
+    var allVers = lines.Select(x => x.v).Distinct().Order().ToArray();
+    var maxlen = lines.Select(x => x.device.Length).Max();
+
+    PrintUtils.PrintHeader("Versions usage");
+
+    PrintLine("Versions:", "All", allVers, maxlen);
+    Console.WriteLine();
+
+    var bydev = lines.GroupBy(x => x.device).OrderByDescending(x => x.Count());
+    foreach (var dev in bydev)
+    {
+        string name = dev.Key;
+        string total = dev.Count().ToString();
+        var byVers = allVers.Select(x => dev.Count(y => y.v == x).ToString());
+        PrintLine(name, total, byVers, maxlen);
+    }
+}
+
+// geopoint
+{
+    PrintUtils.PrintHeader("Geopoint look choice stats");
+    PrintUtils.PrintGeoTypeStat(lines, 1, "Я");
+    PrintUtils.PrintGeoTypeStat(lines, 2, "Ы");
+    PrintUtils.PrintGeoTypeStat(lines, 3, "Ъ");
 }
 
 static void PrintLine(string a, string b, IEnumerable<string> c, int maxALen)
