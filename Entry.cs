@@ -16,7 +16,7 @@ public class Entry
             date = new DateTime(dt[2], dt[0], dt[1], tm[0], tm[1], tm[2]);
         }
         v = te.v!.Contains("1.0.9.") ? "1.0.9.x" : te.v;
-        string s = te.parsed ?? te.device!.Split('/').First();
+        string s = (te.parsed?.Split('|').First()) ?? te.device!.Split('/').First();
         if (s.Contains("MicroEmulator"))
             device = "MicroEmulator";
         else if (s.Contains("KEm"))
