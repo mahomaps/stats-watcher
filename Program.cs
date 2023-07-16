@@ -5,21 +5,26 @@ using Newtonsoft.Json;
 const string url = "https://nnp.nnchan.ru/mahomaps/log.txt";
 
 Console.Write("Show from date (MM.DD.YYYY): ");
-var from = DateTime.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+var dateFrom = DateTime.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+var dateTo = DateTime.Now;
+
+if (dateFrom >= dateTo)
+{
+    Console.WriteLine("Invalid date!");
+    return;
+}
 
 using HttpClient hc = new HttpClient();
 Console.WriteLine();
 Console.WriteLine($"GET: {url}");
 var rawLines = hc.GetStringAsync(url).Result.Split('\n');
 Console.WriteLine("GET: OK");
-
-
 var lines = rawLines
     .Select(JsonConvert.DeserializeObject<TempEntry>)
     .Where(x => x != null && !x.IsBroken())
     .Select(x => new Entry(x!))
     .Where(x => x.device != "сиськи" && x.device != "asd")
-    .Where(x => x.date > from).ToArray();
+    .Where(x => x.date > dateFrom).ToArray();
 
 Console.WriteLine();
 Console.WriteLine($"Total launch count: {lines.Length}");
