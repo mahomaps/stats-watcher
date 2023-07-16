@@ -7,6 +7,7 @@ const string url = "https://nnp.nnchan.ru/mahomaps/log.txt";
 Console.Write("Show from date (MM.DD.YYYY): ");
 var dateFrom = DateTime.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
 var dateTo = DateTime.Now;
+var days = Math.Ceiling((dateTo - dateFrom).TotalDays);
 
 if (dateFrom >= dateTo)
 {
@@ -28,7 +29,6 @@ var lines = rawLines
 
 // totals
 {
-    var days = Math.Ceiling((dateTo - dateFrom).TotalDays);
     PrintUtils.PrintHeader("Total stats");
     Console.ForegroundColor = ConsoleColor.White;
     Console.Write("Launch count: ");
@@ -90,6 +90,7 @@ var lines = rawLines
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($" ({mostUsed.Count()})");
         }
+
         Console.WriteLine();
     }
 }
@@ -100,6 +101,36 @@ var lines = rawLines
     PrintUtils.PrintGeoTypeStat(lines, 1, "Я");
     PrintUtils.PrintGeoTypeStat(lines, 2, "Ы");
     PrintUtils.PrintGeoTypeStat(lines, 3, "Ъ");
+}
+
+// telemetry
+{
+    PrintUtils.PrintHeader("Functions usage");
+    var funcNames = Enum.GetNames<UsageFlags>();
+    var maxLen = funcNames.Select(x => x.Length).Max();
+    var funcs = Enum.GetValues<UsageFlags>().Select(x => lines.Where(y => y.usage.HasFlag(x)));
+    var zip = funcNames.Zip(funcs);
+
+    foreach (var func in zip)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write(func.First.PadRight(maxLen + 1));
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("Total: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write(func.Second.Count());
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(", per-day: ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write($"~{func.Second.Count() / days:F2}");
+        Console.WriteLine();
+    }
+}
+
+// end
+{
+    Console.WriteLine();
+    Console.WriteLine();
 }
 
 static void PrintLine(string a, string b, IEnumerable<string> c, int maxALen)
