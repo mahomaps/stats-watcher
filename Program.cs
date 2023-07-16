@@ -17,7 +17,7 @@ Console.WriteLine("GET: OK");
 var lines = rawLines
     .Select(JsonConvert.DeserializeObject<TempEntry>)
     .Where(x => x != null && !x.IsBroken())
-    .Select(x => new Entry(x))
+    .Select(x => new Entry(x!))
     .Where(x => x.device != "сиськи" && x.device != "asd")
     .Where(x => x.date > from).ToArray();
 
