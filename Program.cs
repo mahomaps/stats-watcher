@@ -29,9 +29,11 @@ var lines = rawLines
 Console.WriteLine();
 Console.WriteLine($"Total launch count: {lines.Length}");
 Console.WriteLine();
-PrintGeoTypeStat(lines, 1, "Я");
-PrintGeoTypeStat(lines, 2, "Ы");
-PrintGeoTypeStat(lines, 3, "Ъ");
+
+PrintUtils.PrintHeader("Geopoint look choice stats");
+PrintUtils.PrintGeoTypeStat(lines, 1, "Я");
+PrintUtils.PrintGeoTypeStat(lines, 2, "Ы");
+PrintUtils.PrintGeoTypeStat(lines, 3, "Ъ");
 
 var allVers = lines.Select(x => x.v).Distinct().Order().ToArray();
 var maxlen = lines.Select(x => x.device.Length).Max();
@@ -65,29 +67,4 @@ static void PrintLine(string a, string b, IEnumerable<string> c, int maxALen)
     }
 
     Console.WriteLine();
-}
-
-static void PrintGeoTypeStat(IEnumerable<Entry> data, int t, string name)
-{
-    var f = data.Where(x => x.gt == t).ToArray();
-    Console.Write("Geopoint type ");
-    Console.ForegroundColor = ConsoleColor.Green;
-    Console.Write($"\"{name}\"");
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.Write(" was used ");
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.Write(f.Length);
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.Write(" times.");
-    var max = f.GroupBy(x => x.device).MaxBy(x => x.Count());
-    if (max != null)
-    {
-        Console.Write(" Most used device: ");
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write(max.Key);
-        Console.ForegroundColor = ConsoleColor.White;
-        Console.WriteLine($", {max.Count()} times.");
-    }
-    else
-        Console.WriteLine();
 }
