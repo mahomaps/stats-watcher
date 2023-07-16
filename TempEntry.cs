@@ -7,6 +7,7 @@ public class TempEntry
     public string? parsed;
     public string? device;
     public string? gt;
+    public string? uf;
 
     public bool IsBroken()
     {

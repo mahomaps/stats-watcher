@@ -6,6 +6,7 @@ public class Entry
     public string v;
     public string device;
     public int gt;
+    public UsageFlags usage;
 
     public Entry(TempEntry te)
     {
@@ -29,5 +30,7 @@ public class Entry
             device = s;
 
         gt = te.gt == null ? 0 : int.Parse(te.gt);
+        if (te.uf != null && int.TryParse(te.uf, out int val))
+            usage = (UsageFlags) val;
     }
 }
