@@ -50,9 +50,12 @@ static void PrintLine(string a, string b, IEnumerable<string> c, int maxALen)
     Console.Write(a.PadRight(maxALen + 1));
     Console.ForegroundColor = ConsoleColor.Cyan;
     Console.Write(b.PadRight(9));
-    Console.ForegroundColor = ConsoleColor.White;
     foreach (var n in c)
     {
+        if (n.Equals("0"))
+            Console.ForegroundColor = ConsoleColor.Gray;
+        else
+            Console.ForegroundColor = ConsoleColor.White;
         Console.Write(n.PadRight(9));
     }
 
