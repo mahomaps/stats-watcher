@@ -26,9 +26,23 @@ var lines = rawLines
     .Where(x => x.device != "сиськи" && x.device != "asd")
     .Where(x => x.date > dateFrom).ToArray();
 
-Console.WriteLine();
-Console.WriteLine($"Total launch count: {lines.Length}");
-Console.WriteLine();
+// totals
+{
+    var days = Math.Ceiling((dateTo - dateFrom).TotalDays);
+    PrintUtils.PrintHeader("Total stats");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write("Launch count: ");
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"{lines.Length}");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write("Days passed: ");
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"{(int) days}");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write("Launches per day: ");
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"~{lines.Length / days:F2}");
+}
 
 PrintUtils.PrintHeader("Geopoint look choice stats");
 PrintUtils.PrintGeoTypeStat(lines, 1, "Я");
