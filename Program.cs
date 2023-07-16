@@ -61,9 +61,25 @@ static void PrintLine(string a, string b, IEnumerable<string> c, int maxALen)
 
 static void PrintGeoTypeStat(IEnumerable<Entry> data, int t, string name)
 {
-    var f = data.Where(x => x.gt == t);
-    Console.WriteLine($"Geopoint type \"{name}\" was used {f.Count()} times.");
+    var f = data.Where(x => x.gt == t).ToArray();
+    Console.Write("Geopoint type ");
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.Write($"\"{name}\"");
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write(" was used ");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.Write(f.Length);
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write(" times.");
     var max = f.GroupBy(x => x.device).MaxBy(x => x.Count());
     if (max != null)
-        Console.WriteLine($"Most used device: {max.Key}, {max.Count()} times.");
+    {
+        Console.Write(" Most used device: ");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write(max.Key);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($", {max.Count()} times.");
+    }
+    else
+        Console.WriteLine();
 }
