@@ -64,6 +64,36 @@ var lines = rawLines
     }
 }
 
+// per-day
+{
+    PrintUtils.PrintHeader("Usage by day");
+
+    var byday = lines.GroupBy(x => x.date.Date).OrderBy(x => x.Key).ToArray();
+    var maxLaunches = byday.Select(x => x.Count()).Max();
+    foreach (var day in byday)
+    {
+        var count = day.Count();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write($"{day.Key.Day:00}.{day.Key.Month:00} ");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write(count.ToString().PadLeft(3));
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(' ');
+        Console.Write(new string('#', count));
+        Console.Write(new string(' ', maxLaunches - count));
+        if (count != 0)
+        {
+            var mostUsed = day.GroupBy(x => x.device).OrderByDescending(x => x.Count()).First();
+            Console.Write(" Most used: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(mostUsed.Key);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($" ({mostUsed.Count()})");
+        }
+        Console.WriteLine();
+    }
+}
+
 // geopoint
 {
     PrintUtils.PrintHeader("Geopoint look choice stats");
