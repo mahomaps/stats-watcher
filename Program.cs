@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 const string url = "https://nnp.nnchan.ru/mahomaps/log.txt";
 
+Console.ForegroundColor = ConsoleColor.White;
 Console.Write("Show from date (MM.DD.YYYY): ");
 var dateFrom = DateTime.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
 var dateTo = DateTime.Now;
@@ -129,6 +130,7 @@ var lines = rawLines
 
 // end
 {
+    Console.ForegroundColor = ConsoleColor.White;
     Console.WriteLine();
     Console.WriteLine();
 }
